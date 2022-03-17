@@ -63,6 +63,22 @@ func (c *char) ActionStam(a core.ActionType, p map[string]int) float64 {
 
 }
 
+func (c *char) a1() {
+	c.Core.Events.Subscribe(core.OnDamage, func(args ...interface{}) bool {
+		atk := args[1].(*core.AttackEvent)
+		if atk.Info.ActorIndex != c.Index {
+			return false
+		}
+		if atk.Info.AttackTag != core.AttackTagExtra {
+			return false
+		}
+		for _, x := range c.Core.Chars {
+			x.AddEnergy("klee-a4", 2)
+		}
+		return false
+	}, "kleea2")
+}
+
 func (c *char) a4() {
 	c.Core.Events.Subscribe(core.OnDamage, func(args ...interface{}) bool {
 		atk := args[1].(*core.AttackEvent)
